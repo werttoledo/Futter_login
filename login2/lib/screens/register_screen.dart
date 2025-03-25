@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class RegisterScreen extends StatefulWidget {
   @override
@@ -11,6 +13,35 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
 
+  Future<void> _registerUser() async {
+    if (!_formKey.currentState!.validate()) {
+      return;
+    }
+
+    final url = Uri.parse("http://52.90.111.225:8081/api/cal/auth/register");
+
+    final response = await http.post(
+      url,
+      headers: {"Content-Type": "application/json"},
+      body: jsonEncode({
+        "email": _emailController.text,
+        "password": _passwordController.text
+      }),
+    );
+
+    final responseData = jsonDecode(response.body);
+
+    if (response.statusCode == 200) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("✅ Registro exitoso. Verifica tu correo."))
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("❌ Error: ${responseData['message']}"))
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,7 +53,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // Campo de correo electrónico
               TextFormField(
                 controller: _emailController,
                 decoration: InputDecoration(labelText: "Correo Electrónico"),
@@ -31,16 +61,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   if (value == null || value.isEmpty) {
                     return "Ingrese un correo";
                   }
-                  // Expresión regular para validar el correo
                   String pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$';
-                  RegExp regex = RegExp(pattern);
-                  if (!regex.hasMatch(value)) {
+                  if (!RegExp(pattern).hasMatch(value)) {
                     return "Ingrese un correo válido";
                   }
                   return null;
                 },
               ),
-              // Campo de contraseña
               TextFormField(
                 controller: _passwordController,
                 decoration: InputDecoration(labelText: "Contraseña"),
@@ -55,7 +82,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   return null;
                 },
               ),
-              // Confirmación de contraseña
               TextFormField(
                 controller: _confirmPasswordController,
                 decoration: InputDecoration(labelText: "Repetir Contraseña"),
@@ -71,23 +97,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 },
               ),
               SizedBox(height: 20),
-              // Botón de registro
               ElevatedButton(
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text("Registro exitoso")),
-                    );
-                    Navigator.pushReplacementNamed(context, "/home");
-                  }
-                },
+                onPressed: _registerUser,
                 child: Text("Registrarse"),
-              ),
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: Text("¿Ya tienes cuenta? Inicia sesión"),
               ),
             ],
           ),
