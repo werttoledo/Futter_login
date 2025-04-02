@@ -327,12 +327,13 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       child: ElevatedButton.icon(
                         onPressed: makePurchase,
-                        icon: Icon(Icons.payment, size: 22),
+                        icon: Icon(Icons.payment, size: 22, color: Colors.black),
                         label: Text(
                           "Realizar Compra",
                           style: GoogleFonts.poppins(
                             fontWeight: FontWeight.bold,
                             fontSize: 16,
+                            color: Colors.black,
                           ),
                         ),
                         style: ElevatedButton.styleFrom(

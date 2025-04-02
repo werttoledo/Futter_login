@@ -129,9 +129,8 @@ class _RegisterScreenState extends State<RegisterScreen> with SingleTickerProvid
               begin: Alignment.topRight,
               end: Alignment.bottomLeft,
               colors: [
-                Color(0xFF6A1B9A), // Purple 800
-                Color(0xFF4A148C), // Purple 900
-                Color(0xFF311B92), // Deep Purple 900
+                Color(0xFF007991), // Azul oscuro principal
+                Color(0xFF78FFD6), // Verde aguamarina
               ],
             ),
           ),
@@ -141,35 +140,43 @@ class _RegisterScreenState extends State<RegisterScreen> with SingleTickerProvid
               child: Form(
                 key: _formKey,
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     SizedBox(height: 20),
-                    IconButton(
-                      icon: Icon(Icons.arrow_back_ios, color: Colors.white),
-                      onPressed: () => Navigator.pushReplacementNamed(context, "/login"),
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: IconButton(
+                        icon: Icon(Icons.arrow_back_ios, color: Colors.white),
+                        onPressed: () => Navigator.pushReplacementNamed(context, "/login"),
+                      ),
                     ),
                     SizedBox(height: size.height * 0.05),
                     FadeTransition(
                       opacity: _fadeAnimation,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Crear Cuenta',
-                            style: GoogleFonts.poppins(
-                              fontSize: 36,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
+                      child: SizedBox(
+                        width: double.infinity,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              'Crear Cuenta',
+                              style: GoogleFonts.poppins(
+                                fontSize: 36,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                              textAlign: TextAlign.center,
                             ),
-                          ),
-                          Text(
-                            'Regístrate para acceder a todas las funciones',
-                            style: GoogleFonts.poppins(
-                              fontSize: 16,
-                              color: Colors.white70,
+                            Text(
+                              'Regístrate para acceder a todas las funciones',
+                              style: GoogleFonts.poppins(
+                                fontSize: 16,
+                                color: Colors.white70,
+                              ),
+                              textAlign: TextAlign.center,
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                     SizedBox(height: size.height * 0.06),
@@ -187,7 +194,7 @@ class _RegisterScreenState extends State<RegisterScreen> with SingleTickerProvid
                               TextFormField(
                                 controller: _emailController,
                                 decoration: InputDecoration(
-                                  prefixIcon: Icon(Icons.email_outlined, color: Color(0xFF6A1B9A)),
+                                  prefixIcon: Icon(Icons.email_outlined, color: Color(0xFF007991)),
                                   labelText: "Correo Electrónico",
                                   labelStyle: TextStyle(color: Colors.grey[700]),
                                   border: OutlineInputBorder(
@@ -213,7 +220,7 @@ class _RegisterScreenState extends State<RegisterScreen> with SingleTickerProvid
                               TextFormField(
                                 controller: _passwordController,
                                 decoration: InputDecoration(
-                                  prefixIcon: Icon(Icons.lock_outline, color: Color(0xFF6A1B9A)),
+                                  prefixIcon: Icon(Icons.lock_outline, color: Color(0xFF007991)),
                                   labelText: "Contraseña",
                                   labelStyle: TextStyle(color: Colors.grey[700]),
                                   border: OutlineInputBorder(
@@ -238,7 +245,7 @@ class _RegisterScreenState extends State<RegisterScreen> with SingleTickerProvid
                               TextFormField(
                                 controller: _confirmPasswordController,
                                 decoration: InputDecoration(
-                                  prefixIcon: Icon(Icons.lock_outline, color: Color(0xFF6A1B9A)),
+                                  prefixIcon: Icon(Icons.lock_outline, color: Color(0xFF007991)),
                                   labelText: "Repetir Contraseña",
                                   labelStyle: TextStyle(color: Colors.grey[700]),
                                   border: OutlineInputBorder(
@@ -271,7 +278,7 @@ class _RegisterScreenState extends State<RegisterScreen> with SingleTickerProvid
                                 child: ElevatedButton(
                                   onPressed: _isLoading ? null : _registerUser,
                                   style: ElevatedButton.styleFrom(
-                                    backgroundColor: Color(0xFF6A1B9A),
+                                    backgroundColor: Color(0xFF007991),
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(12),
                                     ),
@@ -291,6 +298,7 @@ class _RegisterScreenState extends State<RegisterScreen> with SingleTickerProvid
                                           style: GoogleFonts.poppins(
                                             fontWeight: FontWeight.bold,
                                             fontSize: 16,
+                                            color: Colors.black,
                                           ),
                                         ),
                                 ),

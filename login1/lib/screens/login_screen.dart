@@ -28,13 +28,12 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
     _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(
         parent: _animationController,
-        curve: Interval(0.2, 1.0, curve: Curves.easeOut),
+        curve: Curves.easeOut,
       ),
     );
     _animationController.forward();
   }
 
-  // Check if user is already logged in
   Future<void> _checkIfLoggedIn() async {
     final isLoggedIn = await TokenService.isLoggedIn();
     if (isLoggedIn) {
@@ -67,16 +66,13 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
       });
 
       if (response['success'] == true) {
-        // Crear y guardar el objeto de usuario
         final user = UserLogin(
           username: email,
           password: password,
           token: response['token'],
         );
-        
+
         await user.saveToPrefs();
-        
-        // Navegar a la pantalla principal
         Navigator.pushReplacementNamed(context, "/home");
       } else {
         setState(() {
@@ -104,31 +100,29 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Container(
-          height: size.height,
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [
-                Color(0xFF673AB7), // Deep Purple
-                Color(0xFF512DA8), // Dark Purple
-                Color(0xFF311B92), // Very Dark Purple
-              ],
-            ),
+      body: Container(
+        height: size.height,
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              Color(0xFF007991), // Azul oscuro principal
+              Color(0xFF78FFD6), // Verde agua
+            ],
           ),
-          child: SafeArea(
+        ),
+        child: SafeArea(
+          child: Center(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 30),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  SizedBox(height: size.height * 0.1),
                   FadeTransition(
                     opacity: _fadeAnimation,
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
                           'Bienvenido',
@@ -163,102 +157,36 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                             TextField(
                               controller: _emailController,
                               decoration: InputDecoration(
-                                prefixIcon: Icon(Icons.email_outlined, color: Color(0xFF673AB7)),
+                                prefixIcon: Icon(Icons.email_outlined, color: Color(0xFF007991)),
                                 labelText: "Correo Electrónico",
-                                labelStyle: TextStyle(color: Colors.grey[700]),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                  borderSide: BorderSide.none,
-                                ),
-                                filled: true,
-                                fillColor: Colors.grey[100],
                               ),
-                              keyboardType: TextInputType.emailAddress,
                             ),
                             SizedBox(height: 16),
                             TextField(
                               controller: _passwordController,
                               decoration: InputDecoration(
-                                prefixIcon: Icon(Icons.lock_outline, color: Color(0xFF673AB7)),
+                                prefixIcon: Icon(Icons.lock_outline, color: Color(0xFF007991)),
                                 labelText: "Contraseña",
-                                labelStyle: TextStyle(color: Colors.grey[700]),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                  borderSide: BorderSide.none,
-                                ),
-                                filled: true,
-                                fillColor: Colors.grey[100],
                               ),
                               obscureText: true,
                               onSubmitted: (_) => _login(),
                             ),
-                            SizedBox(height: 8),
-                            Align(
-                              alignment: Alignment.centerRight,
-                              child: TextButton(
-                                onPressed: () {
-                                  // Implementar recuperación de contraseña
-                                },
-                                child: Text(
-                                  '¿Olvidaste tu contraseña?',
-                                  style: TextStyle(
-                                    color: Color(0xFF673AB7),
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            SizedBox(height: 16),
-                            if (_errorMessage.isNotEmpty)
-                              Container(
-                                padding: EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-                                decoration: BoxDecoration(
-                                  color: Colors.red[50],
-                                  borderRadius: BorderRadius.circular(8),
-                                  border: Border.all(color: Colors.red[200]!),
-                                ),
-                                child: Row(
-                                  children: [
-                                    Icon(Icons.error_outline, color: Colors.red),
-                                    SizedBox(width: 8),
-                                    Expanded(
-                                      child: Text(
-                                        _errorMessage,
-                                        style: TextStyle(color: Colors.red[800]),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
                             SizedBox(height: 24),
                             SizedBox(
                               width: double.infinity,
-                              height: 50,
                               child: ElevatedButton(
                                 onPressed: _isLoading ? null : _login,
                                 style: ElevatedButton.styleFrom(
-                                  backgroundColor: Color(0xFF673AB7),
+                                  backgroundColor: Color(0xFF007991),
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(12),
                                   ),
-                                  elevation: 2,
                                 ),
                                 child: _isLoading
-                                    ? SizedBox(
-                                        height: 24,
-                                        width: 24,
-                                        child: CircularProgressIndicator(
-                                          valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                                          strokeWidth: 2,
-                                        ),
+                                    ? CircularProgressIndicator(
+                                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                                       )
-                                    : Text(
-                                        "INICIAR SESIÓN",
-                                        style: GoogleFonts.poppins(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 16,
-                                        ),
-                                      ),
+                                    : Text("INICIAR SESIÓN", style: TextStyle(color: Colors.black)),
                               ),
                             ),
                           ],
@@ -266,37 +194,22 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                       ),
                     ),
                   ),
-                  Spacer(),
+                  SizedBox(height: 20),
                   FadeTransition(
                     opacity: _fadeAnimation,
-                    child: Center(
-                      child: TextButton(
-                        onPressed: () {
-                          Navigator.pushNamed(context, "/register");
-                        },
-                        child: RichText(
-                          text: TextSpan(
-                            text: "¿No tienes cuenta? ",
-                            style: GoogleFonts.poppins(
-                              color: Colors.white70,
-                              fontSize: 15,
-                            ),
-                            children: [
-                              TextSpan(
-                                text: "Regístrate",
-                                style: GoogleFonts.poppins(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 15,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
+                    child: TextButton(
+                      onHover: (hovering) {
+                        setState(() {});
+                      },
+                      onPressed: () {
+                        Navigator.pushNamed(context, "/register");
+                      },
+                      style: ButtonStyle(
+                        overlayColor: MaterialStateProperty.all(Colors.blue[900]),
                       ),
+                      child: Text("¿No tienes cuenta? Regístrate", style: GoogleFonts.poppins(color: Colors.white70)),
                     ),
                   ),
-                  SizedBox(height: 20),
                 ],
               ),
             ),
